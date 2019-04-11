@@ -1,6 +1,6 @@
 package com.lynn.config;
 
-import org.mybatis.spring.SqlSessionFactoryBean;
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -49,10 +49,10 @@ public class DruidConfiguation {
     }
 
     @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactoryBean sqlSessionFactory() throws NamingException, IOException {
-        SqlSessionFactoryBean sqlSessionFactoryBean = null;
+    public MybatisSqlSessionFactoryBean sqlSessionFactory() throws NamingException, IOException {
+        MybatisSqlSessionFactoryBean sqlSessionFactoryBean = null;
         // 实例SessionFactory
-        sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         // 配置数据源
         sqlSessionFactoryBean.setDataSource(dataSource());
         sqlSessionFactoryBean.setTypeAliasesPackage(typeAliases);
@@ -61,7 +61,7 @@ public class DruidConfiguation {
         PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         // 能加载多个，所以可以配置通配符(如：classpath*:mapper/**/*.xml)
         sqlSessionFactoryBean.setMapperLocations(resourcePatternResolver.getResources(mapperLocations));
-        // 配置mybatis的config文件(我目前用不上)
+        // 配置mybatis的config文件
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         return sqlSessionFactoryBean;
     }

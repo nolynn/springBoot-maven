@@ -45,6 +45,9 @@ public class ShiroConfiguation {
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/*.*", "authc");
+        //swagger2 放开地址
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

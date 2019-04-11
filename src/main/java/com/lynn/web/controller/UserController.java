@@ -2,6 +2,7 @@ package com.lynn.web.controller;
 
 import com.lynn.web.entities.User;
 import com.lynn.web.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user")
+@Api("用户模块")
 public class UserController {
 
     @Autowired
