@@ -19,4 +19,9 @@ public class ApplicationTests {
         System.out.println(userMapper.findUserByUserName("zk"));
     }
 
+    @Test
+    public void loginTest() {
+
+    }
+
 }
