@@ -1,4 +1,4 @@
-package com.lynn.config;
+package com.lynn.web.config;
 
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Value;

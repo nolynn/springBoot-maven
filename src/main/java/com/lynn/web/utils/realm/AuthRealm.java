@@ -1,9 +1,9 @@
-package com.lynn.utils.realm;
+package com.lynn.web.utils.realm;
 
+import com.lynn.web.utils.PasswordUtils;
 import com.lynn.web.entities.User;
 import com.lynn.web.service.MenuService;
 import com.lynn.web.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -62,13 +62,12 @@ public class AuthRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getCredentials();
         String password = new String((char[]) token.getCredentials()); //得到密码
+        String pwd = PasswordUtils.encodeBase64(password);
         User user = userService.findUserByUserName(username);
+        return new SimpleAuthenticationInfo(user, pwd, getName());
+    }
 
-        if (StringUtils.isBlank(username)) {
-//            String passwords = Md5.encodeBase64(user);
-            SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, "123123", getName());
-            return info;
-        }
-        return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+    public static void main(String[] args) {
+        System.out.println(PasswordUtils.encodeBase64("123123"));
     }
 }

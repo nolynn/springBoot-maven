@@ -1,6 +1,6 @@
-package com.lynn.config;
+package com.lynn.web.config;
 
-import com.lynn.utils.realm.AuthRealm;
+import com.lynn.web.utils.realm.AuthRealm;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -12,6 +12,9 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -27,27 +30,41 @@ public class ShiroConfiguation {
 
     Logger logger = Logger.getLogger(ShiroConfiguation.class.getName());
 
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("*"); // 1 设置访问源地址
+        corsConfiguration.addAllowedHeader("*"); // 2 设置访问源请求头
+        corsConfiguration.addAllowedMethod("*"); // 3 设置访问源请求方法
+        return corsConfiguration;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", buildConfig()); // 4 对接口配置跨域设置
+        return new CorsFilter(source);
+    }
 
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
-        //配置登录的url和登录成功的url
-        bean.setLoginUrl("/login");
-        bean.setSuccessUrl("/home");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
+
+        filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/index.html", "anon");
         filterChainDefinitionMap.put("/loginUser", "anon");
-        filterChainDefinitionMap.put("/logout*", "anon");
-        filterChainDefinitionMap.put("/jsp/error.jsp*", "anon");
-        filterChainDefinitionMap.put("/jsp/index.jsp*", "authc");
-        filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*.*", "authc");
-        //swagger2 放开地址
+        filterChainDefinitionMap.put("/file/**", "anon");
+
+        //swagger2 相关
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+
+        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

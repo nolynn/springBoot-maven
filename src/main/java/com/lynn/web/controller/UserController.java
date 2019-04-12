@@ -2,8 +2,10 @@ package com.lynn.web.controller;
 
 import com.lynn.web.entities.User;
 import com.lynn.web.service.UserService;
+import com.lynn.web.utils.BaseResult;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +24,13 @@ public class UserController {
     UserService userService;
 
     @ResponseBody
-    @RequestMapping("/getUser")
-    public User getUser() {
+    @PostMapping("/getUser")
+    public BaseResult<User> getUser() {
+        BaseResult<User> result = new BaseResult<>();
         String username = "zk";
-        return userService.findUserByUserName(username);
+        User user = userService.findUserByUserName(username);
+        result.setData(user).setCode(200).setTotalCount(1);
+        return result;
     }
 
 }
