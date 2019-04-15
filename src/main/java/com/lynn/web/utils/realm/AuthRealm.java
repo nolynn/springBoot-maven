@@ -1,13 +1,11 @@
 package com.lynn.web.utils.realm;
 
-import com.lynn.web.utils.PasswordUtils;
 import com.lynn.web.entities.User;
 import com.lynn.web.service.MenuService;
 import com.lynn.web.service.UserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.lynn.web.utils.PasswordUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -64,6 +62,16 @@ public class AuthRealm extends AuthorizingRealm {
         String password = new String((char[]) token.getCredentials()); //得到密码
         String pwd = PasswordUtils.encodeBase64(password);
         User user = userService.findUserByUserName(username);
+
+        if (null == user) {
+            throw new UnknownAccountException();
+        }
+        if (!StringUtils.equals(user.getPassword(), pwd)) {
+            throw new IncorrectCredentialsException();
+        }
+        if (user.getEnable() == 1) {
+            throw new DisabledAccountException();
+        }
         return new SimpleAuthenticationInfo(user, pwd, getName());
     }
 

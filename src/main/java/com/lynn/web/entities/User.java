@@ -16,5 +16,5 @@ public class User {
     private Integer age;
     private Integer sex;
     private String delFlag;
-    private String del_flag;
+    private int enable;
 }

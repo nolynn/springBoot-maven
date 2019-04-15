@@ -53,7 +53,10 @@ public class ShiroConfiguation {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
+        bean.setLoginUrl("/unauth");
+
         filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/index.html", "anon");
         filterChainDefinitionMap.put("/loginUser", "anon");
         filterChainDefinitionMap.put("/file/**", "anon");
@@ -64,7 +67,7 @@ public class ShiroConfiguation {
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
 
-        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
+        //filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
