@@ -1,5 +1,6 @@
 package com.lynn.web.utils;
 
+import com.lynn.web.entities.SessionUser;
 import com.lynn.web.entities.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.InvalidSessionException;
@@ -30,6 +31,10 @@ public class ShiroSessionUtils {
 
         }
         return null;
+    }
+
+    public static SessionUser getSessionUser() {
+        return (SessionUser) getSessionAttribute(LOGIN_USER);
     }
 
     /**

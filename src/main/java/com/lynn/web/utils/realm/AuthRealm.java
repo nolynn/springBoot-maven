@@ -4,7 +4,6 @@ import com.lynn.web.entities.User;
 import com.lynn.web.service.MenuService;
 import com.lynn.web.service.UserService;
 import com.lynn.web.utils.PasswordUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -58,7 +57,7 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String username = (String) token.getCredentials();
+        String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials()); //得到密码
         String pwd = PasswordUtils.encodeBase64(password);
         User user = userService.findUserByUserName(username);
@@ -66,13 +65,10 @@ public class AuthRealm extends AuthorizingRealm {
         if (null == user) {
             throw new UnknownAccountException();
         }
-        if (!StringUtils.equals(user.getPassword(), pwd)) {
-            throw new IncorrectCredentialsException();
-        }
         if (user.getEnable() == 1) {
             throw new DisabledAccountException();
         }
-        return new SimpleAuthenticationInfo(user, pwd, getName());
+        return new SimpleAuthenticationInfo(user, password, getName());
     }
 
     public static void main(String[] args) {

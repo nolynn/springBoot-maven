@@ -54,7 +54,7 @@ public class UserController {
         BaseResult result = new BaseResult<>();
         Serializable sessionId = "";
 
-        if (StringUtils.isNotEmpty(username) || StringUtils.isNotEmpty(username)) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return result.setMsg("用户名或密码不能为空").setCode(200).setTotalCount(1);
         }
 
@@ -71,11 +71,11 @@ public class UserController {
         } catch (AccountException e) {
             msg = "认证失败, 未知原因";
         }
-        if (StringUtils.isEmpty(msg)) {
+        if (StringUtils.isEmpty(msg) && subject.isAuthenticated()) {
             User user = (User) subject.getPrincipal();
             ShiroSessionUtils.addUserToSession(user);
             sessionId = ShiroSessionUtils.getSession().getId();
-            result.setData("用户" + username + "登录成功!");
+            result.setData("用户" + username + "登录成功! sessionId : [" + sessionId + "");
             result.setCode(200);
             logger.info("login success [{}] session_id [{}]", username, sessionId);
             return result;
