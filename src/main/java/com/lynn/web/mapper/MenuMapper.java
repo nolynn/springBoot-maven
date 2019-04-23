@@ -1,5 +1,6 @@
 package com.lynn.web.mapper;
 
+import com.lynn.web.entities.Menu;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Set;
@@ -24,4 +25,6 @@ public interface MenuMapper {
      * @return
      */
     Set<String> getMenuByAdmin();
+
+    Menu getMenuByPermission(@Param("permissionStr") String permissionStr);
 }

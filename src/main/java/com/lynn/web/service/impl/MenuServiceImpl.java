@@ -1,5 +1,6 @@
 package com.lynn.web.service.impl;
 
+import com.lynn.web.entities.Menu;
 import com.lynn.web.mapper.MenuMapper;
 import com.lynn.web.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Set<String> getMenuByAdmin() {
         return mapper.getMenuByAdmin();
+    }
+
+    @Override
+    public Menu getMenuByPermission(String permissionStr) {
+        return mapper.getMenuByPermission(permissionStr);
     }
 }

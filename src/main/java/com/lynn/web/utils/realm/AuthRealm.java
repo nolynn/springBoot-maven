@@ -38,7 +38,6 @@ public class AuthRealm extends AuthorizingRealm {
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> menuRoleList;
-
         if (user.getId().equals("1")) {
             menuRoleList = menuService.getMenuByAdmin();
         } else {

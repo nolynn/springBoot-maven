@@ -1,13 +1,16 @@
 package com.lynn.web.controller;
 
+import com.lynn.web.entities.SessionUser;
 import com.lynn.web.entities.User;
 import com.lynn.web.service.UserService;
 import com.lynn.web.utils.BaseResult;
 import com.lynn.web.utils.ShiroSessionUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -24,7 +28,7 @@ import java.io.Serializable;
  * @Auther: lynn
  */
 @RestController
-@Api("用户模块")
+@Api(tags = "用户模块")
 public class UserController {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -34,6 +38,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/user/getUser")
+    @RequiresPermissions("get")
     public BaseResult<User> getUser() {
         BaseResult<User> result = new BaseResult<>();
         String username = "zk";
@@ -81,6 +86,20 @@ public class UserController {
             return result;
         }
         result.setMsg(msg);
+        return result;
+    }
+
+    @ApiOperation(value = "用户登出", notes = "用户登出")
+    @PostMapping(value = "/logOut")
+    public BaseResult<String> logOut(HttpServletRequest request) {
+        BaseResult result = new BaseResult();
+        SessionUser sessionUser = ShiroSessionUtils.getSessionUser();
+        result.setData("用户" + sessionUser.getUsername() + "退出系统！");
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        result.setCode(200);
+        result.setData("退出成功！");
+        System.out.println("退出成功！");
         return result;
     }
 

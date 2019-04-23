@@ -1,5 +1,7 @@
 package com.lynn.web.service;
 
+import com.lynn.web.entities.Menu;
+
 import java.util.Set;
 
 public interface MenuService {
@@ -18,4 +20,5 @@ public interface MenuService {
      */
     Set<String> getMenuByAdmin();
 
+    Menu getMenuByPermission(String permissionStr);
 }

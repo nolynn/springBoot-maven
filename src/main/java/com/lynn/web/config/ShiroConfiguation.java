@@ -50,7 +50,7 @@ public class ShiroConfiguation {
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
-        //配置访问权限
+        //配置访问权限n
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         bean.setLoginUrl("/unauth");
