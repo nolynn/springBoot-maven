@@ -2,6 +2,7 @@ package com.lynn.web.controller;
 
 import com.lynn.web.entities.SessionUser;
 import com.lynn.web.entities.User;
+import com.lynn.web.entities.params.UserSelectVo;
 import com.lynn.web.service.UserService;
 import com.lynn.web.utils.BaseResult;
 import com.lynn.web.utils.ShiroSessionUtils;
@@ -10,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.Serializable;
 
 /**
@@ -38,11 +39,10 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/user/getUser")
-    @RequiresPermissions("get")
-    public BaseResult<User> getUser() {
+//    @RequiresPermissions("get")
+    public BaseResult<User> getUser(@Valid UserSelectVo userSelectVo) {
         BaseResult<User> result = new BaseResult<>();
-        String username = "zk";
-        User user = userService.findUserByUserName(username);
+        User user = userService.findUserByUserName(userSelectVo.getUsername());
         result.setData(user).setCode(200).setTotalCount(1);
         return result;
     }
