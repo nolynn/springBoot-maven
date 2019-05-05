@@ -10,4 +10,6 @@ import com.lynn.web.entities.User;
 public interface UserService {
 
     User findUserByUserName(String username);
+
+    User register(String zhangkai, String password);
 }
